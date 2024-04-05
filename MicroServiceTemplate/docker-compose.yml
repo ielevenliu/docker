@@ -1,0 +1,47 @@
+version: "3" # Compose版本
+
+services: # 服务(多个容器编排)
+  microService:
+    image: application_image:tag # 镜像
+    container_name: my_server # 容器名 --name
+    ports: # 映射端口 -p
+      - "6001:6001"
+    volumes: # 挂载卷
+      - /host_path/microService:/data
+    networks: # 网络
+      - atguigu_net
+    depends_on: # 启动依赖
+      - redis
+      - mysql
+
+  redis: # 服务名，可以在同一个网段下直接访问
+    image: redis:tag
+    ports: 
+      - "6379:6379"
+    volumes: 
+      - /host_path/redis/redis.conf:/etc/redis/redis.conf
+      - /host_path/redis/data:/data
+    networks: 
+      - atguigu_net
+    command: redis-server /etc/redis/redis.conf
+  
+  mysql: 
+    image: mysql:tag
+    environment: # 环境变量
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+      MYSQL_DATABASE: "db2021"
+      MYSQL_USER: 'zzyy'
+      MYSQL_PASSWORD: 'zzyy123'
+    ports: 
+      - "3306:3306"
+    volumes: 
+      - /host_path/mysql/db:/var/lib/mysql
+      - /host_path/mysql/conf/my.cnf:/etc/my.cnf
+      - /host_path/mysql/init:/docker-entrypoint-initdb.d
+    networks: 
+      - atguigu_net
+    command: --default-authentication-plugin=mysql_native_password # 解决外部无法访问
+  
+networks: # 创建网络
+  atguigu_net
