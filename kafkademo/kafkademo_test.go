@@ -9,3 +9,7 @@ func TestKafkaProducer(t *testing.T) {
 func TestKafkaConsumer(t *testing.T) {
 	KafkaConsumer("demo-topic-1", []string{"192.168.1.5:9092"}, make(chan struct{}))
 }
+
+func TestKafkaConsumerGroup(t *testing.T) {
+	KafkaConsumerGroup("example", "demo-topic-1", []string{"192.168.1.5:9092"}, make(chan struct{}))
+}
