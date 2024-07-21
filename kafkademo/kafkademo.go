@@ -37,7 +37,7 @@ func KafkaProducer(topic string, addrs []string, stop chan struct{}) {
 		default:
 			msg.Value = sarama.StringEncoder(strconv.FormatInt(value, 10))
 			if err = client.SendMessages([]*sarama.ProducerMessage{msg}); err != nil {
-				log.Fatalf(" Send message failed, err: %+v", err)
+				log.Printf("Send message failed, err: %+v", err)
 				continue
 			}
 			log.Printf("Send msg: %+v", msg)
